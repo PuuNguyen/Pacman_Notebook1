@@ -1,45 +1,33 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\HK3\\LTTQ\\PacMan\\",
+  "WorkspaceRootPath": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\maps\\map4.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map4.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\mapviewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\mapviewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\maps\\map3.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map3.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\properties\\resources.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\properties\\resources.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\maps\\map2.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map2.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\maps\\map2.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map2.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\maps\\map1.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map1.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\maps\\map3.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map3.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\maps\\map4.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map4.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\mapbrowserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\mapbrowserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|c:\\users\\chaun\\downloads\\doanit007\\pacman_notebook1\\pacman\\pacman\\maps\\map1.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{14B031AD-8BED-A633-7FD8-77E4F504F802}|PacMan\\PacMan.csproj|solutionrelative:pacman\\maps\\map1.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\pacman.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\pacman.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\map.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\map.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\mapviewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\mapviewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|d:\\hk3\\lttq\\pacman\\pacman\\mapbrowserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\pacman\\mapbrowserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{4816B349-4A69-41BD-9642-15A80EE0D0AA}|PacMan\\PacMan.csproj|solutionrelative:pacman\\mapbrowserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -50,140 +38,106 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{de1fc918-f32e-4dd7-a915-1792a051f26b}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Map4.txt",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map4.txt",
-              "RelativeDocumentMoniker": "PacMan\\Maps\\Map4.txt",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map4.txt",
-              "RelativeToolTip": "PacMan\\Maps\\Map4.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-11-25T13:36:28.545Z",
+              "DocumentIndex": 1,
+              "Title": "Resources.resx",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Properties\\Resources.resx",
+              "RelativeDocumentMoniker": "PacMan\\Properties\\Resources.resx",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Properties\\Resources.resx",
+              "RelativeToolTip": "PacMan\\Properties\\Resources.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-11-25T16:01:45.031Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
+              "Title": "Map1.txt",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map1.txt",
+              "RelativeDocumentMoniker": "PacMan\\Maps\\Map1.txt",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map1.txt",
+              "RelativeToolTip": "PacMan\\Maps\\Map1.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-11-25T15:59:03.684Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Map3.txt",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map3.txt",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map3.txt",
               "RelativeDocumentMoniker": "PacMan\\Maps\\Map3.txt",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map3.txt",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map3.txt",
               "RelativeToolTip": "PacMan\\Maps\\Map3.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-11-25T13:36:19.237Z",
+              "WhenOpened": "2026-11-25T15:58:51.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Map4.txt",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map4.txt",
+              "RelativeDocumentMoniker": "PacMan\\Maps\\Map4.txt",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map4.txt",
+              "RelativeToolTip": "PacMan\\Maps\\Map4.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-11-25T15:58:53.391Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Map2.txt",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map2.txt",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map2.txt",
               "RelativeDocumentMoniker": "PacMan\\Maps\\Map2.txt",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map2.txt",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\Maps\\Map2.txt",
               "RelativeToolTip": "PacMan\\Maps\\Map2.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-11-25T13:36:10.375Z",
+              "WhenOpened": "2026-11-25T15:58:46.36Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Map1.txt",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map1.txt",
-              "RelativeDocumentMoniker": "PacMan\\Maps\\Map1.txt",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Maps\\Map1.txt",
-              "RelativeToolTip": "PacMan\\Maps\\Map1.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-11-25T13:36:06.692Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Map.cs",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Map.cs",
-              "RelativeDocumentMoniker": "PacMan\\Map.cs",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Map.cs",
-              "RelativeToolTip": "PacMan\\Map.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAYwCEAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-25T13:26:17.641Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
               "Title": "MapViewForm.cs",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapViewForm.cs",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\MapViewForm.cs",
               "RelativeDocumentMoniker": "PacMan\\MapViewForm.cs",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapViewForm.cs",
+              "ToolTip": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\MapViewForm.cs",
               "RelativeToolTip": "PacMan\\MapViewForm.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAYwEgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAewDAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-25T13:25:49.28Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MapBrowserForm.cs",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapBrowserForm.cs",
-              "RelativeDocumentMoniker": "PacMan\\MapBrowserForm.cs",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapBrowserForm.cs",
-              "RelativeToolTip": "PacMan\\MapBrowserForm.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAD4vzEAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-25T13:25:24.529Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "MapBrowserForm.cs [Design]",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapBrowserForm.cs",
-              "RelativeDocumentMoniker": "PacMan\\MapBrowserForm.cs",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapBrowserForm.cs [Design]",
-              "RelativeToolTip": "PacMan\\MapBrowserForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-25T13:25:11.037Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Program.cs",
-              "RelativeDocumentMoniker": "PacMan\\Program.cs",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\Program.cs",
-              "RelativeToolTip": "PacMan\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-25T13:21:42.673Z",
+              "WhenOpened": "2026-11-25T15:58:24.25Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "PacMan",
-              "DocumentMoniker": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\PacMan.csproj",
-              "RelativeDocumentMoniker": "PacMan\\PacMan.csproj",
-              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\PacMan.csproj",
-              "RelativeToolTip": "PacMan\\PacMan.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-11-25T13:18:33.139Z",
-              "EditorCaption": ""
+              "Title": "MapBrowserForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\chaun\\Downloads\\DoAnIt007\\Pacman_Notebook1\\PacMan\\PacMan\\MapBrowserForm.cs",
+              "RelativeDocumentMoniker": "PacMan\\MapBrowserForm.cs",
+              "ToolTip": "D:\\HK3\\LTTQ\\PacMan\\PacMan\\MapBrowserForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-25T13:25:11.037Z"
             }
           ]
         },
@@ -191,6 +145,10 @@
           "DockedWidth": 1496,
           "SelectedChildIndex": -1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
