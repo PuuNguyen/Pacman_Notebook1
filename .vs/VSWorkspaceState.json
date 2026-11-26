@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\PacMan"
+    "\\PacMan",
+    "\\PacMan\\PacMan"
   ],
-  "SelectedNode": "\\PacMan\\PacMan.slnx",
+  "SelectedNode": "\\PacMan\\PacMan\\MapViewForm.cs",
   "PreviewInSolutionExplorer": false
 }
