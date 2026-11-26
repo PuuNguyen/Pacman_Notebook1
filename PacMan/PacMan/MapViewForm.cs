@@ -1,6 +1,10 @@
 using System.Drawing;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using PacMan.Core;
+using PacMan.Scenes;
+using PacMan.Strategies;
 
 namespace WinFormsApp1
 {
@@ -20,10 +24,14 @@ namespace WinFormsApp1
         private readonly Image orangeGhostImage;
         private readonly MemoryStream coinStream;
         private readonly Image coinImage;
+        private readonly InputManager input;
+        private readonly PlayScene playScene;
+        private readonly GameLoop gameLoop;
 
         public MapViewForm(Map map, string title)
         {
             this.map = map;
+            input = new InputManager();
 
             pacmanStream = new MemoryStream(global::PacMan.Properties.Resources.pacman);
             pacmanImage = Image.FromStream(pacmanStream);
@@ -38,6 +46,32 @@ namespace WinFormsApp1
             coinStream = new MemoryStream(global::PacMan.Properties.Resources.Coin);
             coinImage = Image.FromStream(coinStream);
 
+            var ghostSprites = new Dictionary<char, Image>
+            {
+                ['G'] = greenGhostImage,
+                ['R'] = redGhostImage,
+                ['O'] = orangeGhostImage,
+                ['Y'] = yellowGhostImage
+            };
+
+            // Áp movement vào ghost (hiện tại tạm áp vào map 1)
+            Func<char, IGhostMovementStrategy> strategyFactory;
+            if (title.Contains("Map1", StringComparison.OrdinalIgnoreCase))
+            {
+                strategyFactory = _ => new RandomGhostMovementStrategy();
+            }
+            else
+            {
+                // Tạm thời các map khác cũng dùng random
+                strategyFactory = _ => new RandomGhostMovementStrategy();
+            }
+            playScene = new PlayScene(
+                map,
+                input,
+                pacmanImage,
+                ghostSprites,
+                tileSize: TileSize);
+
             Text = title;
             BackColor = Color.Black;
             DoubleBuffered = true;
@@ -45,7 +79,13 @@ namespace WinFormsApp1
             MaximizeBox = false;
             ClientSize = new Size(map.Columns * TileSize, map.Rows * TileSize);
             StartPosition = FormStartPosition.CenterScreen;
+            KeyPreview = true;
             Paint += (s, e) => DrawMap(e.Graphics);
+            KeyDown += (s, e) => input.KeyDown(e.KeyCode);
+            KeyUp += (s, e) => input.KeyUp(e.KeyCode);
+
+            gameLoop = new GameLoop(this, playScene);
+            Shown += (s, e) => gameLoop.Start();
 
             ImageAnimator.Animate(pacmanImage, FrameChanged);
             ImageAnimator.Animate(greenGhostImage, FrameChanged);
@@ -55,6 +95,7 @@ namespace WinFormsApp1
             ImageAnimator.Animate(coinImage, FrameChanged);
             FormClosed += (s, e) =>
             {
+                gameLoop.Dispose();
                 ImageAnimator.StopAnimate(pacmanImage, FrameChanged);
                 ImageAnimator.StopAnimate(greenGhostImage, FrameChanged);
                 ImageAnimator.StopAnimate(yellowGhostImage, FrameChanged);
@@ -71,6 +112,8 @@ namespace WinFormsApp1
                 yellowGhostStream.Dispose();
                 orangeGhostImage.Dispose();
                 orangeGhostStream.Dispose();
+                coinImage.Dispose();
+                coinStream.Dispose();
             };
 
         }
