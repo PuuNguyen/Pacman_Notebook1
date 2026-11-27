@@ -22,6 +22,8 @@ namespace PacMan.Scenes
         private CollisionSystem? collision;
         public bool IsGameOver => collision?.IsGameOver ?? false;
         public bool IsLevelCleared => collision?.IsLevelCleared ?? false;
+        public event Action? Won;
+        public event Action? Lost;
 
         public Player Player => player;
         public IReadOnlyList<Ghost> Ghosts => ghosts;
@@ -97,6 +99,8 @@ namespace PacMan.Scenes
                 ghost.Update(dt, map.Grid);
 
             collision.Update(dt);
+            if (IsGameOver) Lost?.Invoke();
+            else if (IsLevelCleared) Won?.Invoke();
         }
 
         public void Render(Graphics g)

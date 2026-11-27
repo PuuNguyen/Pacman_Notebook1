@@ -27,6 +27,7 @@ namespace WinFormsApp1
         private readonly InputManager input;
         private readonly PlayScene playScene;
         private readonly GameLoop gameLoop;
+        private readonly Label scoreLabel;
 
         public MapViewForm(Map map, string title)
         {
@@ -72,12 +73,26 @@ namespace WinFormsApp1
                 ghostSprites,
                 tileSize: TileSize);
 
+
+            scoreLabel = new Label
+            {
+                Location = new Point(10, map.Rows * TileSize + 10),
+                AutoSize = true,
+                ForeColor = Color.White,
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                Text = "Score: 0   Lives: 3"
+            };
+            Controls.Add(scoreLabel);
+
+            playScene.Won += () => BeginInvoke(() => EndGame($"Bạn đã thắng!\nĐiểm: {playScene.Player.Score}", "Chiến thắng"));
+            playScene.Lost += () => BeginInvoke(() => EndGame($"Game Over! Ma đã bắt bạn.\nĐiểm: {playScene.Player.Score}", "Thua cuộc"));
+
             Text = title;
             BackColor = Color.Black;
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            ClientSize = new Size(map.Columns * TileSize, map.Rows * TileSize);
+            ClientSize = new Size(map.Columns * TileSize, map.Rows * TileSize + 40);  //chừa chỗ hiện score và live
             StartPosition = FormStartPosition.CenterScreen;
             KeyPreview = true;
             Paint += (s, e) => DrawMap(e.Graphics);
@@ -120,6 +135,9 @@ namespace WinFormsApp1
 
         private void DrawMap(Graphics g)
         {
+            string text = $"Score: {playScene.Player.Score}   Lives: {playScene.Player.Lives}";
+            if (scoreLabel.Text != text) scoreLabel.Text = text;
+
             ImageAnimator.UpdateFrames(pacmanImage);
             ImageAnimator.UpdateFrames(greenGhostImage);
             ImageAnimator.UpdateFrames(redGhostImage);
@@ -183,6 +201,13 @@ namespace WinFormsApp1
             {
                 BeginInvoke(Invalidate);
             }
+        }
+
+        private void EndGame(string message, string title)
+        {
+            gameLoop.Stop();
+            MessageBox.Show(message, title);
+            Close();
         }
     }
 }
