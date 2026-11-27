@@ -5,10 +5,18 @@ namespace PacMan.Entities
 {
     public class Player : Entities
     {
+        public const int MaxLives = 3;
         public int Lives { get; set; } = 3;
         public int Score { get; set; } = 0;
         public bool IsPowerMode { get; set; } = false;
+        public const float PowerDuration = 10f;
         public float PowerModeTimer { get; set; } = 0f;
+
+        public float FrozenTimer { get; private set; }
+        public void Freeze(float seconds) => FrozenTimer = seconds;
+
+        public void Heal() => Lives = Math.Min(Lives + 1, MaxLives);
+        public void ResetLives() => Lives = MaxLives;
 
         private readonly Image? sprite;
         private float _mouthAnimTime;
@@ -29,6 +37,8 @@ namespace PacMan.Entities
 
         public override void Update(float dt, char[,] grid)
         {
+            if (FrozenTimer > 0f) { FrozenTimer -= dt; return; }
+
             int rows = grid.GetLength(0);
             int cols = grid.GetLength(1);
             if (rows == 0 || cols == 0) return;
@@ -85,5 +95,10 @@ namespace PacMan.Entities
             }
         }
 
+        public void ActivatePowerMode()
+        {
+            IsPowerMode = true;
+            PowerModeTimer = PowerDuration;
+        }
     }
 }
