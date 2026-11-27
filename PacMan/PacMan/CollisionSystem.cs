@@ -51,7 +51,7 @@ namespace PacMan.Utils
             {
                 map.Grid[player.Row, player.Col] = ' ';
                 player.Score += 50;
-
+                player.ActivatePowerMode();
             }
         }
 
