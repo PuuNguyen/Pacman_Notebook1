@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using PacMan.Core;
+﻿using PacMan.Core;
 using PacMan.Entities;
 using PacMan.Strategies;
+using PacMan.Utils;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using WinFormsApp1;
 
 namespace PacMan.Scenes
@@ -17,6 +18,12 @@ namespace PacMan.Scenes
         private readonly Func<char, IGhostMovementStrategy> strategyFactory;
         private readonly Random random = new();
         private readonly List<Ghost> ghosts = new();
+
+        private CollisionSystem? collision;
+        public bool IsGameOver => collision?.IsGameOver ?? false;
+        public bool IsLevelCleared => collision?.IsLevelCleared ?? false;
+        public event Action? Won;
+        public event Action? Lost;
 
         public Player Player => player;
         public IReadOnlyList<Ghost> Ghosts => ghosts;
@@ -76,16 +83,24 @@ namespace PacMan.Scenes
                     map.Grid[row, column] = '.';
                 }
             }
+
+            collision = new CollisionSystem(map, player, ghosts, random, (player.Row, player.Col));
         }
 
         public void Update(float dt)
         {
+            if (collision == null || IsGameOver || IsLevelCleared) return;
+
             var (dx, dy) = input.GetMovementDirection();
             player.SetDesiredDirection(dx, dy);
             player.Update(dt, map.Grid);
 
             foreach (Ghost ghost in ghosts)
                 ghost.Update(dt, map.Grid);
+
+            collision.Update(dt);
+            if (IsGameOver) Lost?.Invoke();
+            else if (IsLevelCleared) Won?.Invoke();
         }
 
         public void Render(Graphics g)
