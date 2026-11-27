@@ -206,6 +206,7 @@ namespace WinFormsApp1
         private void EndGame(string message, string title)
         {
             gameLoop.Stop();
+            MapBrowserForm.RecordBestScore(Text, playScene.Player.Score);
             MessageBox.Show(message, title);
             Close();
         }

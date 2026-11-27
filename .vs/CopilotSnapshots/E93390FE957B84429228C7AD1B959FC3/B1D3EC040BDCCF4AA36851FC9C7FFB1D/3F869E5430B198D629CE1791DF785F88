@@ -1,0 +1,482 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Windows.Forms;
+
+namespace WinFormsApp1
+{
+    public class MapBrowserForm : Form
+    {
+        private readonly string mapsDir;
+        private readonly LevelPathPanel levelPanel = new();
+        private readonly Label selectionLabel = new();
+        private readonly List<LevelCard> levelCards = new();
+        private string? selectedPath;
+
+        public MapBrowserForm()
+        {
+            Text = "Pac-Man - Hành trình sao";
+            ClientSize = new Size(960, 720);
+            MinimumSize = new Size(760, 600);
+            StartPosition = FormStartPosition.CenterScreen;
+            BackColor = Color.FromArgb(18, 24, 67);
+            DoubleBuffered = true;
+            mapsDir = FindMapsFolder();
+
+            var header = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 126,
+                BackColor = Color.FromArgb(37, 46, 118)
+            };
+            header.Paint += DrawHeader;
+
+            var title = new Label
+            {
+                Text = "PAC-MAN  •  HÀNH TRÌNH SAO",
+                Location = new Point(32, 19),
+                AutoSize = true,
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 23, FontStyle.Bold),
+                BackColor = Color.Transparent
+            };
+            var subtitle = new Label
+            {
+                Text = "Chọn một màn chơi và thu thập thật nhiều sao!",
+                Location = new Point(37, 70),
+                AutoSize = true,
+                ForeColor = Color.FromArgb(204, 219, 255),
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                BackColor = Color.Transparent
+            };
+            header.Controls.Add(title);
+            header.Controls.Add(subtitle);
+
+            levelPanel.Dock = DockStyle.Fill;
+            levelPanel.AutoScroll = true;
+            levelPanel.BackColor = Color.FromArgb(20, 27, 73);
+            levelPanel.Resize += (s, e) => ArrangeLevelCards();
+
+            var footer = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 108,
+                BackColor = Color.FromArgb(31, 39, 98)
+            };
+            footer.Paint += (s, e) =>
+            {
+                using var pen = new Pen(Color.FromArgb(74, 91, 174), 2);
+                e.Graphics.DrawLine(pen, 0, 0, footer.Width, 0);
+            };
+
+            selectionLabel.Location = new Point(28, 22);
+            selectionLabel.Size = new Size(300, 58);
+            selectionLabel.ForeColor = Color.FromArgb(238, 241, 255);
+            selectionLabel.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            selectionLabel.Text = "Chọn một màn trên hành trình";
+            footer.Controls.Add(selectionLabel);
+
+            var actions = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Right,
+                Width = 590,
+                Height = 108,
+                Padding = new Padding(12, 27, 18, 0),
+                FlowDirection = FlowDirection.RightToLeft,
+                WrapContents = false,
+                BackColor = Color.Transparent
+            };
+
+            var playButton = new MenuButton("CHƠI MÀN", Color.FromArgb(44, 190, 122), Color.FromArgb(27, 142, 93))
+            {
+                Size = new Size(160, 54),
+                Font = new Font("Segoe UI", 11, FontStyle.Bold)
+            };
+            playButton.Click += (s, e) => OpenSelectedMap();
+
+            var editButton = new MenuButton("SỬA MAP", Color.FromArgb(91, 117, 224), Color.FromArgb(57, 78, 171))
+            {
+                Size = new Size(145, 54),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            editButton.Click += (s, e) => EditSelectedInNotepad();
+
+            var refreshButton = new MenuButton("LÀM MỚI", Color.FromArgb(137, 91, 204), Color.FromArgb(93, 59, 155))
+            {
+                Size = new Size(135, 54),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            refreshButton.Click += (s, e) => LoadMapList();
+            actions.Controls.AddRange(new Control[] { playButton, editButton, refreshButton });
+            footer.Controls.Add(actions);
+
+            Controls.Add(levelPanel);
+            Controls.Add(footer);
+            Controls.Add(header);
+
+            Activated += (s, e) => LoadMapList();
+            LoadMapList();
+        }
+
+        public static void RecordBestScore(string mapName, int score)
+        {
+            Dictionary<string, int> scores = LoadBestScores();
+            string key = Path.GetFileNameWithoutExtension(mapName);
+            if (scores.TryGetValue(key, out int best) && best >= score)
+                return;
+
+            scores[key] = score;
+            string filePath = GetProgressFilePath();
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+            File.WriteAllText(filePath, JsonSerializer.Serialize(scores));
+        }
+
+        private static Dictionary<string, int> LoadBestScores()
+        {
+            try
+            {
+                string filePath = GetProgressFilePath();
+                if (!File.Exists(filePath))
+                    return new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+                var savedScores = JsonSerializer.Deserialize<Dictionary<string, int>>(File.ReadAllText(filePath));
+                return savedScores == null
+                    ? new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+                    : new Dictionary<string, int>(savedScores, StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex) when (ex is IOException || ex is JsonException || ex is UnauthorizedAccessException)
+            {
+                return new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        private static string GetProgressFilePath() => Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "PacMan",
+            "level-scores.json");
+
+        private static string FindMapsFolder()
+        {
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+            while (dir != null)
+            {
+                string candidate = Path.Combine(dir.FullName, "Maps");
+                if (Directory.Exists(candidate))
+                    return candidate;
+                dir = dir.Parent;
+            }
+            throw new DirectoryNotFoundException("Không tìm thấy thư mục Maps.");
+        }
+
+        private void LoadMapList()
+        {
+            string? previousSelection = selectedPath;
+            foreach (Control control in levelPanel.Controls)
+                control.Dispose();
+            levelPanel.Controls.Clear();
+            levelCards.Clear();
+
+            string[] mapFiles = Directory.GetFiles(mapsDir, "*.txt")
+                .OrderBy(path => Path.GetFileNameWithoutExtension(path), StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+            Dictionary<string, int> scores = LoadBestScores();
+
+            for (int i = 0; i < mapFiles.Length; i++)
+            {
+                string path = mapFiles[i];
+                string mapName = Path.GetFileNameWithoutExtension(path);
+                scores.TryGetValue(mapName, out int score);
+                var card = new LevelCard(i + 1, mapName, score, ScoreToStars(score));
+                card.Click += (s, e) => SelectLevel(path);
+                levelCards.Add(card);
+                levelPanel.Controls.Add(card);
+            }
+
+            if (mapFiles.Length == 0)
+            {
+                selectedPath = null;
+                levelPanel.Controls.Add(new Label
+                {
+                    Text = "Chưa tìm thấy màn chơi nào trong thư mục Maps.",
+                    AutoSize = true,
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 13, FontStyle.Bold),
+                    Location = new Point(30, 30),
+                    BackColor = Color.Transparent
+                });
+                selectionLabel.Text = "Chưa có màn chơi";
+            }
+            else
+            {
+                string initialPath = mapFiles.Contains(previousSelection, StringComparer.OrdinalIgnoreCase)
+                    ? previousSelection!
+                    : mapFiles[0];
+                SelectLevel(initialPath);
+            }
+
+            ArrangeLevelCards();
+        }
+
+        private void ArrangeLevelCards()
+        {
+            int contentWidth = Math.Max(levelPanel.ClientSize.Width, ClientSize.Width - 24);
+            int center = contentWidth / 2;
+            for (int i = 0; i < levelCards.Count; i++)
+            {
+                int x = i % 2 == 0 ? center - 310 : center + 30;
+                levelCards[i].Location = new Point(Math.Max(24, x), 24 + i * 142);
+            }
+            levelPanel.AutoScrollMinSize = new Size(0, 48 + levelCards.Count * 142);
+            levelPanel.Invalidate();
+        }
+
+        private void SelectLevel(string path)
+        {
+            selectedPath = path;
+            foreach (LevelCard card in levelCards)
+                card.IsSelected = string.Equals(card.MapName, Path.GetFileNameWithoutExtension(path), StringComparison.OrdinalIgnoreCase);
+
+            LevelCard? selected = levelCards.FirstOrDefault(card => card.IsSelected);
+            selectionLabel.Text = selected == null
+                ? "Chọn một màn trên hành trình"
+                : $"ĐÃ CHỌN  {selected.MapName.ToUpperInvariant()}     •     ĐIỂM CAO NHẤT: {selected.BestScore:N0}";
+        }
+
+        private string? GetSelectedPath()
+        {
+            if (selectedPath == null)
+            {
+                MessageBox.Show(this, "Hãy chọn một màn trước.", "Pac-Man", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+            return selectedPath;
+        }
+
+        private void OpenSelectedMap()
+        {
+            string? path = GetSelectedPath();
+            if (path == null) return;
+
+            try
+            {
+                var map = Map.FromFile(path);
+                new MapViewForm(map, Path.GetFileName(path)).Show(this);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Không thể mở màn chơi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EditSelectedInNotepad()
+        {
+            string? path = GetSelectedPath();
+            if (path == null) return;
+            System.Diagnostics.Process.Start("notepad.exe", path);
+        }
+
+        private static int ScoreToStars(int score) => score >= 1200 ? 3 : score >= 700 ? 2 : score >= 300 ? 1 : 0;
+
+        private static void DrawHeader(object? sender, PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender!;
+            using var brush = new LinearGradientBrush(panel.ClientRectangle,
+                Color.FromArgb(48, 61, 151), Color.FromArgb(89, 61, 168), 0f);
+            e.Graphics.FillRectangle(brush, panel.ClientRectangle);
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            using var dotBrush = new SolidBrush(Color.FromArgb(50, 218, 227, 255));
+            for (int i = 0; i < 13; i++)
+            {
+                int x = panel.Width - 250 + (i % 5) * 42;
+                int y = 16 + (i / 5) * 34;
+                e.Graphics.FillEllipse(dotBrush, x, y, 5, 5);
+            }
+        }
+
+        private static void DrawStar(Graphics graphics, PointF center, float radius, Color color, bool filled)
+        {
+            var points = new PointF[10];
+            for (int i = 0; i < points.Length; i++)
+            {
+                float angle = (float)(-Math.PI / 2 + i * Math.PI / 5);
+                float currentRadius = i % 2 == 0 ? radius : radius * 0.46f;
+                points[i] = new PointF(center.X + MathF.Cos(angle) * currentRadius, center.Y + MathF.Sin(angle) * currentRadius);
+            }
+
+            if (filled)
+            {
+                using var brush = new SolidBrush(color);
+                graphics.FillPolygon(brush, points);
+            }
+            using var pen = new Pen(filled ? Color.FromArgb(255, 255, 218) : color, 1.8f);
+            graphics.DrawPolygon(pen, points);
+        }
+
+        private sealed class LevelPathPanel : Panel
+        {
+            public LevelPathPanel()
+            {
+                DoubleBuffered = true;
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                base.OnPaint(e);
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                int center = Math.Max(ClientSize.Width, Parent?.ClientSize.Width ?? ClientSize.Width) / 2;
+                using var path = new GraphicsPath();
+                for (int i = 0; i < 22; i++)
+                {
+                    int x = 26 + (i * 97 % Math.Max(1, ClientSize.Width - 52));
+                    int y = 24 + (i * 71 % Math.Max(1, ClientSize.Height - 48));
+                    using var brush = new SolidBrush(Color.FromArgb(55, 187, 204, 255));
+                    e.Graphics.FillEllipse(brush, x, y, 3, 3);
+                }
+
+                for (int i = 0; i < Math.Max(0, Controls.Count - 1); i++)
+                {
+                    int y1 = 24 + i * 142 + 56;
+                    int y2 = 24 + (i + 1) * 142 + 56;
+                    int x1 = i % 2 == 0 ? center - 170 : center + 170;
+                    int x2 = (i + 1) % 2 == 0 ? center - 170 : center + 170;
+                    path.AddBezier(x1, y1, center + (i % 2 == 0 ? -70 : 70), y1 + 34,
+                        center + (i % 2 == 0 ? 70 : -70), y2 - 34, x2, y2);
+                }
+
+                using var pen = new Pen(Color.FromArgb(120, 115, 132, 224), 5)
+                {
+                    DashPattern = new[] { 2f, 4f },
+                    DashCap = DashCap.Round,
+                    StartCap = LineCap.Round,
+                    EndCap = LineCap.Round
+                };
+                e.Graphics.DrawPath(pen, path);
+            }
+        }
+
+        private sealed class LevelCard : Button
+        {
+            public string MapName { get; }
+            public int BestScore { get; }
+            public bool IsSelected
+            {
+                get => isSelected;
+                set
+                {
+                    isSelected = value;
+                    Invalidate();
+                }
+            }
+
+            private readonly int levelNumber;
+            private readonly int stars;
+            private bool isSelected;
+
+            public LevelCard(int levelNumber, string mapName, int bestScore, int stars)
+            {
+                this.levelNumber = levelNumber;
+                MapName = mapName;
+                BestScore = bestScore;
+                this.stars = stars;
+                Size = new Size(280, 112);
+                FlatStyle = FlatStyle.Flat;
+                FlatAppearance.BorderSize = 0;
+                BackColor = Color.Transparent;
+                ForeColor = Color.White;
+                Cursor = Cursors.Hand;
+                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                var bounds = new Rectangle(3, 3, Width - 7, Height - 8);
+                using var path = RoundedRectangle(bounds, 18);
+                using var fill = new LinearGradientBrush(bounds,
+                    IsSelected ? Color.FromArgb(83, 91, 190) : Color.FromArgb(55, 64, 139),
+                    IsSelected ? Color.FromArgb(57, 63, 144) : Color.FromArgb(37, 45, 111), 90f);
+                e.Graphics.FillPath(fill, path);
+                using var outline = new Pen(IsSelected ? Color.FromArgb(255, 218, 91) : Color.FromArgb(103, 119, 207), IsSelected ? 3 : 1.5f);
+                e.Graphics.DrawPath(outline, path);
+
+                using var badgeBrush = new SolidBrush(IsSelected ? Color.FromArgb(255, 193, 55) : Color.FromArgb(102, 120, 224));
+                e.Graphics.FillEllipse(badgeBrush, 18, 26, 48, 48);
+                using var badgeFont = new Font("Segoe UI", 14, FontStyle.Bold);
+                using var eyebrowFont = new Font("Segoe UI", 8, FontStyle.Bold);
+                using var titleFont = new Font("Segoe UI", 15, FontStyle.Bold);
+                TextRenderer.DrawText(e.Graphics, levelNumber.ToString("00"), badgeFont,
+                    new Rectangle(18, 26, 48, 48), Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+
+                TextRenderer.DrawText(e.Graphics, $"MÀN {levelNumber:00}", eyebrowFont,
+                    new Rectangle(78, 17, 100, 19), Color.FromArgb(190, 207, 255), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(e.Graphics, MapName, titleFont,
+                    new Rectangle(77, 34, 145, 29), Color.White, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                TextRenderer.DrawText(e.Graphics, $"ĐIỂM CAO  {BestScore:N0}", eyebrowFont,
+                    new Rectangle(78, 68, 145, 20), Color.FromArgb(202, 212, 255), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+
+                for (int i = 0; i < 3; i++)
+                    DrawStar(e.Graphics, new PointF(226 + i * 16, 49), 8, i < stars ? Color.FromArgb(255, 207, 63) : Color.FromArgb(143, 156, 205), i < stars);
+            }
+
+            private static GraphicsPath RoundedRectangle(Rectangle rectangle, int radius)
+            {
+                int diameter = radius * 2;
+                var path = new GraphicsPath();
+                path.AddArc(rectangle.X, rectangle.Y, diameter, diameter, 180, 90);
+                path.AddArc(rectangle.Right - diameter, rectangle.Y, diameter, diameter, 270, 90);
+                path.AddArc(rectangle.Right - diameter, rectangle.Bottom - diameter, diameter, diameter, 0, 90);
+                path.AddArc(rectangle.X, rectangle.Bottom - diameter, diameter, diameter, 90, 90);
+                path.CloseFigure();
+                return path;
+            }
+        }
+
+        private sealed class MenuButton : Button
+        {
+            private readonly Color topColor;
+            private readonly Color bottomColor;
+            private bool hovered;
+
+            public MenuButton(string text, Color topColor, Color bottomColor)
+            {
+                Text = text;
+                this.topColor = topColor;
+                this.bottomColor = bottomColor;
+                FlatStyle = FlatStyle.Flat;
+                FlatAppearance.BorderSize = 0;
+                ForeColor = Color.White;
+                Cursor = Cursors.Hand;
+                SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+                MouseEnter += (s, e) => { hovered = true; Invalidate(); };
+                MouseLeave += (s, e) => { hovered = false; Invalidate(); };
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                var bounds = new Rectangle(2, 2, Width - 5, Height - 5);
+                using var path = new GraphicsPath();
+                int diameter = 18;
+                path.AddArc(bounds.X, bounds.Y, diameter, diameter, 180, 90);
+                path.AddArc(bounds.Right - diameter, bounds.Y, diameter, diameter, 270, 90);
+                path.AddArc(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter, 0, 90);
+                path.AddArc(bounds.X, bounds.Bottom - diameter, diameter, diameter, 90, 90);
+                path.CloseFigure();
+                Color top = hovered ? ControlPaint.Light(topColor, 0.15f) : topColor;
+                Color bottom = hovered ? ControlPaint.Light(bottomColor, 0.15f) : bottomColor;
+                using var fill = new LinearGradientBrush(bounds, top, bottom, 90f);
+                e.Graphics.FillPath(fill, path);
+                using var pen = new Pen(Color.FromArgb(95, 255, 255, 255), 1.2f);
+                e.Graphics.DrawPath(pen, path);
+                TextRenderer.DrawText(e.Graphics, Text, Font, bounds, ForeColor,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+            }
+        }
+    }
+}

@@ -1,0 +1,98 @@
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+
+namespace WinFormsApp1
+{
+    public class MapBrowserForm : Form
+    {
+        private readonly string mapsDir;
+        private readonly ListBox listBox = new() { Dock = DockStyle.Fill };
+
+        public MapBrowserForm()
+        {
+            Text = "Pacman - Danh sách map";
+            Size = new System.Drawing.Size(400, 450);
+            StartPosition = FormStartPosition.CenterScreen;
+
+            mapsDir = FindMapsFolder();
+
+            var buttons = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 45, Padding = new Padding(5) };
+            var btnView = new Button { Text = "Xem map", Width = 100 };
+            var btnNotepad = new Button { Text = "Sửa bằng Notepad", Width = 150 };
+            var btnRefresh = new Button { Text = "Làm mới", Width = 100 };
+
+            btnView.Click += (s, e) => OpenSelectedMap();
+            btnNotepad.Click += (s, e) => EditSelectedInNotepad();
+            btnRefresh.Click += (s, e) => LoadMapList();
+            listBox.DoubleClick += (s, e) => OpenSelectedMap();
+
+            buttons.Controls.AddRange(new Control[] { btnView, btnNotepad, btnRefresh });
+            Controls.Add(listBox);
+            Controls.Add(buttons);
+
+            // Tự làm mới danh sách khi quay lại form (sau khi sửa file trong Notepad)
+            Activated += (s, e) => LoadMapList();
+
+            LoadMapList();
+        }
+
+        private static string FindMapsFolder()
+        {
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+            while (dir != null)
+            {
+                string candidate = Path.Combine(dir.FullName, "Maps");
+                if (Directory.Exists(candidate))
+                    return candidate;
+                dir = dir.Parent;
+            }
+            throw new DirectoryNotFoundException("Không tìm thấy thư mục Maps.");
+        }
+
+        private void LoadMapList()
+        {
+            string? selected = listBox.SelectedItem as string;
+            listBox.Items.Clear();
+            foreach (string file in Directory.GetFiles(mapsDir, "*.txt"))
+                listBox.Items.Add(Path.GetFileName(file));
+
+            if (selected != null && listBox.Items.Contains(selected))
+                listBox.SelectedItem = selected;
+        }
+
+        private string? GetSelectedPath()
+        {
+            if (listBox.SelectedItem is not string name)
+            {
+                MessageBox.Show("Chọn một map trước.");
+                return null;
+            }
+            return Path.Combine(mapsDir, name);
+        }
+
+        private void OpenSelectedMap()
+        {
+            string? path = GetSelectedPath();
+            if (path == null) return;
+
+            try
+            {
+                var map = Map.FromFile(path);
+                new MapViewForm(map, Path.GetFileName(path)).Show(this);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi đọc map: " + ex.Message);
+            }
+        }
+
+        private void EditSelectedInNotepad()
+        {
+            string? path = GetSelectedPath();
+            if (path == null) return;
+            Process.Start("notepad.exe", path);
+        }
+    }
+}

@@ -1,0 +1,213 @@
+﻿using System.Drawing;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+using PacMan.Core;
+using PacMan.Scenes;
+using PacMan.Strategies;
+
+namespace WinFormsApp1
+{
+    public class MapViewForm : Form
+    {
+        private const int TileSize = 30;
+        private readonly Map map;
+        private readonly MemoryStream pacmanStream;
+        private readonly Image pacmanImage;
+        private readonly MemoryStream greenGhostStream;
+        private readonly Image greenGhostImage;
+        private readonly MemoryStream redGhostStream;
+        private readonly Image redGhostImage;
+        private readonly MemoryStream yellowGhostStream;
+        private readonly Image yellowGhostImage;
+        private readonly MemoryStream orangeGhostStream;
+        private readonly Image orangeGhostImage;
+        private readonly MemoryStream coinStream;
+        private readonly Image coinImage;
+        private readonly InputManager input;
+        private readonly PlayScene playScene;
+        private readonly GameLoop gameLoop;
+        private readonly Label scoreLabel;
+
+        public MapViewForm(Map map, string title)
+        {
+            this.map = map;
+            input = new InputManager();
+
+            pacmanStream = new MemoryStream(global::PacMan.Properties.Resources.pacman);
+            pacmanImage = Image.FromStream(pacmanStream);
+            greenGhostStream = new MemoryStream(global::PacMan.Properties.Resources.GreenGhost);
+            greenGhostImage = Image.FromStream(greenGhostStream);
+            redGhostStream = new MemoryStream(global::PacMan.Properties.Resources.RedGhost);
+            redGhostImage = Image.FromStream(redGhostStream);
+            yellowGhostStream = new MemoryStream(global::PacMan.Properties.Resources.YellowGhost);
+            yellowGhostImage = Image.FromStream(yellowGhostStream);
+            orangeGhostStream = new MemoryStream(global::PacMan.Properties.Resources.OrangeGhost);
+            orangeGhostImage = Image.FromStream(orangeGhostStream);
+            coinStream = new MemoryStream(global::PacMan.Properties.Resources.Coin);
+            coinImage = Image.FromStream(coinStream);
+
+            var ghostSprites = new Dictionary<char, Image>
+            {
+                ['G'] = greenGhostImage,
+                ['R'] = redGhostImage,
+                ['O'] = orangeGhostImage,
+                ['Y'] = yellowGhostImage
+            };
+
+            // Áp movement vào ghost (hiện tại tạm áp vào map 1)
+            Func<char, IGhostMovementStrategy> strategyFactory;
+            if (title.Contains("Map1", StringComparison.OrdinalIgnoreCase))
+            {
+                strategyFactory = _ => new RandomGhostMovementStrategy();
+            }
+            else
+            {
+                // Tạm thời các map khác cũng dùng random
+                strategyFactory = _ => new RandomGhostMovementStrategy();
+            }
+            playScene = new PlayScene(
+                map,
+                input,
+                pacmanImage,
+                ghostSprites,
+                tileSize: TileSize);
+
+
+            scoreLabel = new Label
+            {
+                Location = new Point(10, map.Rows * TileSize + 10),
+                AutoSize = true,
+                ForeColor = Color.White,
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                Text = "Score: 0   Lives: 3"
+            };
+            Controls.Add(scoreLabel);
+
+            playScene.Won += () => BeginInvoke(() => EndGame($"Bạn đã thắng!\nĐiểm: {playScene.Player.Score}", "Chiến thắng"));
+            playScene.Lost += () => BeginInvoke(() => EndGame($"Game Over! Ma đã bắt bạn.\nĐiểm: {playScene.Player.Score}", "Thua cuộc"));
+
+            Text = title;
+            BackColor = Color.Black;
+            DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            ClientSize = new Size(map.Columns * TileSize, map.Rows * TileSize + 40);  //chừa chỗ hiện score và live
+            StartPosition = FormStartPosition.CenterScreen;
+            KeyPreview = true;
+            Paint += (s, e) => DrawMap(e.Graphics);
+            KeyDown += (s, e) => input.KeyDown(e.KeyCode);
+            KeyUp += (s, e) => input.KeyUp(e.KeyCode);
+
+            gameLoop = new GameLoop(this, playScene);
+            Shown += (s, e) => gameLoop.Start();
+
+            ImageAnimator.Animate(pacmanImage, FrameChanged);
+            ImageAnimator.Animate(greenGhostImage, FrameChanged);
+            ImageAnimator.Animate(yellowGhostImage, FrameChanged);
+            ImageAnimator.Animate(orangeGhostImage, FrameChanged);
+            ImageAnimator.Animate(redGhostImage, FrameChanged);
+            ImageAnimator.Animate(coinImage, FrameChanged);
+            FormClosed += (s, e) =>
+            {
+                gameLoop.Dispose();
+                ImageAnimator.StopAnimate(pacmanImage, FrameChanged);
+                ImageAnimator.StopAnimate(greenGhostImage, FrameChanged);
+                ImageAnimator.StopAnimate(yellowGhostImage, FrameChanged);
+                ImageAnimator.StopAnimate(orangeGhostImage, FrameChanged);
+                ImageAnimator.StopAnimate(redGhostImage, FrameChanged);
+                ImageAnimator.StopAnimate(coinImage, FrameChanged);
+                pacmanImage.Dispose();
+                pacmanStream.Dispose();
+                greenGhostImage.Dispose();
+                greenGhostStream.Dispose();
+                redGhostImage.Dispose();
+                redGhostStream.Dispose();
+                yellowGhostImage.Dispose();
+                yellowGhostStream.Dispose();
+                orangeGhostImage.Dispose();
+                orangeGhostStream.Dispose();
+                coinImage.Dispose();
+                coinStream.Dispose();
+            };
+
+        }
+
+        private void DrawMap(Graphics g)
+        {
+            string text = $"Score: {playScene.Player.Score}   Lives: {playScene.Player.Lives}";
+            if (scoreLabel.Text != text) scoreLabel.Text = text;
+
+            ImageAnimator.UpdateFrames(pacmanImage);
+            ImageAnimator.UpdateFrames(greenGhostImage);
+            ImageAnimator.UpdateFrames(redGhostImage);
+            ImageAnimator.UpdateFrames(yellowGhostImage);
+            ImageAnimator.UpdateFrames(orangeGhostImage);
+            ImageAnimator.UpdateFrames(coinImage);
+
+            for (int row = 0; row < map.Rows; row++)
+            {
+                for (int col = 0; col < map.Columns; col++)
+                {
+                    var rect = new Rectangle(col * TileSize, row * TileSize, TileSize, TileSize);
+                    char tile = map.Grid[row, col];
+                    switch (tile)
+                    {
+                        case '#':
+                            g.FillRectangle(Brushes.Blue, rect);
+                            break;
+
+                        case '.':
+                            DrawSprite(g, coinImage, rect);
+                            break;
+
+                        case 'P':
+                            DrawSprite(g, pacmanImage, rect);
+                            break;
+
+                        case 'G':
+                            DrawSprite(g, greenGhostImage, rect);
+                            break;
+
+                        case 'R':
+                            DrawSprite(g, redGhostImage, rect);
+                            break;
+
+                        case 'O':
+                            DrawSprite(g, orangeGhostImage, rect);
+                            break;
+
+                        case 'Y':
+                            DrawSprite(g, yellowGhostImage, rect);
+                            break;
+
+                        default:
+                            g.FillRectangle(Brushes.Black, rect);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void DrawSprite(Graphics g, Image image, Rectangle rect)
+        {
+            g.FillRectangle(Brushes.Black, rect);
+            g.DrawImage(image, rect);
+        }
+
+        private void FrameChanged(object? sender, EventArgs e)
+        {
+            if (!IsDisposed && IsHandleCreated)
+            {
+                BeginInvoke(Invalidate);
+            }
+        }
+
+        private void EndGame(string message, string title)
+        {
+            gameLoop.Stop();
+            MessageBox.Show(message, title);
+            Close();
+        }
+    }
+}
